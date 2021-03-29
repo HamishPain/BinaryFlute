@@ -29,6 +29,8 @@ high = 20
 wave = SquareTable()
 osc = OscLoop(wave, freq=harmony_freq_list, mul=harmony_vol_map)
 verb = Freeverb(osc, damp=1).out()
+osc2 = OscLoop(wave, freq=1000, mul=0)
+verb2 = Freeverb(osc2, damp=1).out()
 
 a = wave
 a.mul = 0
@@ -38,7 +40,7 @@ s.start()
 import keyboard
 
 pitch_shift_key_map = {'a':-1, 's':-2,'d':-4,'f':-8,'q':1,'w':2,'e':4,'r':8}
-vol_shift_key_map = {'c':0.5}
+vol_shift_key_map = {'c':0.3}
 reset_key_map = {' ':0}
 
 
@@ -58,16 +60,26 @@ def change_pitch_on_press(event: keyboard._Event):
       print(root_midi_note,change_note)
   
   key_press_map[event.name] = event.event_type
-  harmony_freq_list[0] = noteToHz(root_midi_note+change_note+0)
-  osc.freq = harmony_freq_list
+  # harmony_freq_list[0] = noteToHz(root_midi_note+change_note+0)
+  osc2.freq = noteToHz(root_midi_note+change_note)
 
 
-# def change_vol_on_press(event: keyboard._Event):
-#   if event.event_type == keyboard.KEY_DOWN:
-#     if event.name in vol_shift_key_map:
-#       a.mul = vol_shift_key_map[event.name]
-#   else:
-#     a.mul = 0
+def change_vol_on_press(event: keyboard._Event):
+  global root_midi_note, change_note, harmony_freq_list, key_press_map
+
+  if not event.name in key_press_map:
+    key_press_map[event.name] = keyboard.KEY_UP
+
+  if event.event_type == key_press_map[event.name]:
+    return
+
+  if event.event_type == keyboard.KEY_DOWN and key_press_map[event.name] != keyboard.KEY_DOWN:
+    if event.name in vol_shift_key_map:
+      osc2.mul = vol_shift_key_map[event.name]
+  else:
+    osc2.mul = 0
+
+  key_press_map[event.name] = event.event_type
 
 def reset_on_press(event: keyboard._Event):
   global root_midi_note, change_note, harmony_freq_list, key_press_map
@@ -89,6 +101,7 @@ def reset_on_press(event: keyboard._Event):
     print(root_midi_note,change_note)
 
   key_press_map[event.name] = event.event_type
+  osc2.freq = noteToHz(root_midi_note+change_note)
 
 def change_harmony_on_press(event: keyboard._Event):
   global harmony_key_map, harmony_vol, harmony_vol_map, key_press_map
@@ -123,6 +136,9 @@ for key in harmony_key_map.keys():
 
 for key in reset_key_map.keys():
   keyboard.hook_key(key, reset_on_press, suppress=True)
+
+for key in vol_shift_key_map.keys():
+  keyboard.hook_key(key, change_vol_on_press, suppress=True)
 
 while True:
   pass
