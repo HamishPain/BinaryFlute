@@ -58,6 +58,9 @@ def change_pitch_on_press(event: keyboard._Event):
       print(root_midi_note,change_note)
   
   key_press_map[event.name] = event.event_type
+  harmony_freq_list[0] = noteToHz(root_midi_note+change_note+0)
+  osc.freq = harmony_freq_list
+
 
 # def change_vol_on_press(event: keyboard._Event):
 #   if event.event_type == keyboard.KEY_DOWN:
@@ -82,6 +85,7 @@ def reset_on_press(event: keyboard._Event):
   else:
     # Store new root note on release
     root_midi_note = root_midi_note+change_note
+    change_note = 0
     print(root_midi_note,change_note)
 
   key_press_map[event.name] = event.event_type
