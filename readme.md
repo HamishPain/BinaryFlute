@@ -6,7 +6,7 @@ A python synth that uses my binary flute fingerings. Left hand increments by a b
 --|--|--|----|---------|---------|---------|---------
 -1 | -2 | -4 | -8 | +1| +2 |+4 |+8
 
-This is added to the root note per press in relative mode and summed together with the root note in absolute mode. Hold Space bar to change to absolute mode, and hold 'n' to play the note.
+This is added to the root note per press in relative mode and summed together with the root note in absolute mode. Hold Space bar to change to absolute mode, and hold 'n' to play the note. 'z' will reset the current note to your original root note. If you hold 'z' and increment, the root note will be changed.
 
 The right hand can play chords, and these stay relative to the root+changes when they were originally pressed. This allows chords to be semi-independent of the melody.
 
