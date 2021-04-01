@@ -55,7 +55,7 @@ s.start()
 import keyboard
 
 pitch_shift_key_map = {'a':-1, 's':-2,'d':-4,'f':-8,'q':1,'w':2,'e':4,'r':8}
-vol_shift_key_map = {'c':0.3,}
+vol_shift_key_map = {'n':0.3,}
 reset_key_map = {'z':0}
 absolute_mode_key_map = {' ':0}
 absolute_mode = False
